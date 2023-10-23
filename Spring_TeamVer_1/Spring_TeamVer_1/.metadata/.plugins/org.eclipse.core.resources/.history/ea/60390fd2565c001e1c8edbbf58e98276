@@ -1,0 +1,36 @@
+package aaa.controll;
+
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import aaa.model.NoticeDTO;
+import aaa.model.QnaDTO;
+import aaa.service.AskMapper;
+import aaa.service.NoticeMapper;
+import aaa.service.QnaMapper;
+import jakarta.annotation.Resource;
+
+@Controller
+@RequestMapping("/main")
+public class MainController {
+	
+	@Resource // 맵퍼가져오기
+	NoticeMapper ntmp; //공지맵퍼
+	
+	
+	@RequestMapping("")
+	String main(Model mm, NoticeDTO dto) {
+		dto.setPage(1);
+		dto.setLimit(5);
+		dto.calc(ntmp.listCnt());
+		System.out.println(dto);
+		List<NoticeDTO>data = ntmp.list(dto);
+		mm.addAttribute("mainData", data);
+		return "main";
+	}
+	
+}

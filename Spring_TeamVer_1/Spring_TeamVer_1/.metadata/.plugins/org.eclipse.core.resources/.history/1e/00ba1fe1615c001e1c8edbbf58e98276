@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+</head>
+
+<body>
+	<header>
+		<div th:insert="~{header :: header}"></div>
+	</header>
+	[[${recruitDTO}]]
+	<br>
+	[[${mainData}]]<br>
+	[[${session.companysession.cdate}]]
+	<p><input type="text" th:value="${session['cid']}" readonly /></p>
+	<h1>recruit/insert</h1>
+	<form action="" method="post" enctype="multipart/form-data" th:object="${recruitDTO}">
+
+		<table border="">
+			<tr>
+				<td>공고제목</td>
+				<td><input type="text" th:field="*{recruitTitle}" required /></td>
+			</tr>
+			<!--
+			<tr>
+				<td>회사명</td>
+				<td>
+					<input type="text" th:value="${session['cid']}" name="cid" readonly th:if="${session['cid']}" />
+					<input type="text" th:if="${session.adminSession}" name="cid" list="company-list" />
+					<datalist id="company-list">
+						<th:block th:each="recruit : ${mainData}">
+							<option th:value="${recruit.cid}" class="company-list" />
+							<span th:text="|회사번호 ${recruit.ccall}|" class="company-list"></span>
+						</th:block>
+					</datalist>
+				</td>
+			
+			</tr>
+			-->
+			<!--정규직만있어서 readonly로 설정했습니다.-->
+			<tr>
+				<td>근무형태</td>
+				<td><input type="text" readonly value="정규직" /></td>
+			</tr>
+			<tr>
+			<tr>
+				<td>급여(*만원)</td>
+				<td>
+					<input type="radio" value="월급" th:field="*{recruitMtype}" required />
+					월급
+					<input type="radio" value="연봉" th:field="*{recruitMtype}" />
+					연봉
+					<input type="text" th:field="*{recruitMoney}" required />
+				</td>
+			</tr>
+			</tr>
+			<!--<tr>
+				<td>근무지역</td>
+				
+				<td><select>
+				     <option value="서울특별시">서울특별시</option>
+				     <option value="경기도">경기도</option>
+				      <option value="부산광역시">부산광역시</option>
+				      <option value="대구광역시">대구광역시</option>
+				      <option value="인천광역시">인천광역시</option>
+				      <option value="광주광역시">광주광역시</option>
+				      <option value="대전광역시">대전광역시</option>
+				      <option value="제주도">제주도</option>
+	    				</select>
+    				</td>
+			</tr>-->
+			<tr>
+				<td>파일</td>
+				<td><input type="file" th:field="*{mmff}" /></td>
+			</tr>
+			<!--
+			<select name="마감일" th:field="*{recruitMagam}">
+				<option value="7" selected>7일 후</option>
+				<option value="30">30일 후</option>
+				<option value="300">300일 후</option>
+			</select>
+			-->
+			<tr>
+				<td>시작일</td>
+				<td><input type="date" name="regDate" th:min="${today}" required /></td>
+			</tr>
+
+			<tr>
+				<td>마감일</td>
+				<td><input type="date" name="realMagam" th:min="${today}" required /></td>
+			</tr>
+
+			<tr>
+				<td>지역</td>
+				<td>
+					<select th:field="*{recruitLocation}">
+						<option value="서울특별시">서울특별시</option>
+						<option value="경기도">경기도</option>
+						<option value="부산광역시">부산광역시</option>
+						<option value="대구광역시">대구광역시</option>
+						<option value="인천광역시">인천광역시</option>
+						<option value="광주광역시">광주광역시</option>
+						<option value="대전광역시">대전광역시</option>
+						<option value="제주도">제주도</option>
+					</select>
+				</td>
+			</tr>
+
+			</tr>
+
+			<tr>
+				<td>내용</td>
+				<td><textarea type="text" th:field="*{recruitContent}" rows="10" cols="30" required /></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center">
+					<input type="submit" value="작성" />
+					<a th:href="|/recruit/list/${recruitDTO.page}|">뒤로가기</a>
+				</td>
+
+			</tr>
+		</table>
+
+
+	</form>
+
+	<script>
+		// 페이지가 로드될 때 실행
+		document.addEventListener("DOMContentLoaded", function () {
+			// 시작일과 마감일 input 요소 가져오기
+			var startDateInput = document.querySelector('input[name="regDate"]');
+			var endDateInput = document.querySelector('input[name="realMagam"]');
+
+			// 시작일 input 요소의 변경 이벤트 감지
+			startDateInput.addEventListener("change", function () {
+				// 시작일과 마감일의 값을 가져옴
+				var startDate = new Date(startDateInput.value);
+				var endDate = new Date(endDateInput.value);
+
+				// 마감일이 시작일보다 빠른 경우
+				if (endDate < startDate) {
+					alert("마감일은 시작일 이후여야 합니다.");
+					endDateInput.value = ""; // 마감일을 비움
+				}
+			});
+
+			// 마감일 input 요소의 변경 이벤트 감지
+			endDateInput.addEventListener("change", function () {
+				// 시작일과 마감일의 값을 가져옴
+				var startDate = new Date(startDateInput.value);
+				var endDate = new Date(endDateInput.value);
+
+				// 마감일이 시작일보다 빠른 경우
+				if (endDate < startDate) {
+					alert("마감일은 시작일 이후여야 합니다.");
+					endDateInput.value = ""; // 마감일을 비움
+				}
+			});
+			
+			
+			// 파일 입력 필드 가져오기
+            var imageInput = document.getElementById('imageInput');
+
+            // 파일 선택 이벤트 감지
+            imageInput.addEventListener('change', function () {
+                var selectedFile = imageInput.files[0]; // 선택된 파일 가져오기
+
+                // 파일이 선택되지 않은 경우 또는 이미지 파일이 아닌 경우
+                if (!selectedFile || !selectedFile.type.startsWith('image/')) {
+                    alert('이미지 파일만 업로드할 수 있습니다.');
+                    imageInput.value = ''; // 파일 입력 필드 비우기
+                }
+            });
+		});
+
+
+	</script>
+	 
+	<footer>
+		<div th:insert="~{footer :: footer}"></div>
+	</footer>
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>상품안내</title>
+	<style>
+		.product-temp {
+			text-align: center;
+			background-color: #fff;
+			padding: 100px 0;
+		}
+
+		.column {
+			display: flex;
+			justify-content: center;
+		}
+
+		#product-intro img {
+			width: 440px;
+			height: auto;
+		}
+
+		.button-container {
+			text-align: center;
+			margin-top: 50px;
+		}
+
+		.button {
+			display: inline-block;
+			padding: 10px 20px;
+			cursor: pointer;
+			text-align: center;
+			text-decoration: none;
+			background-color: #4dc8d9;
+			color: #fff;
+			border-radius: 5px;
+			border: none;
+		}
+
+		.button:hover {
+			background-color: #000;
+		}
+	</style>
+</head>
+
+<body>
+	<header>
+		<div th:insert="~{header :: header}"></div>
+	</header>
+	<div class="product-temp">
+
+		<div id="product-intro">
+			<div class="row">
+				<div class="column">
+					<img th:src="@{/css/images/prodinthanji1.jpg}" alt="상품안내1">
+					<img th:src="@{/css/images/prodinthanji2.jpg}" alt="상품안내2">
+				</div>
+			</div>
+			<div class="row">
+				<div class="column">
+					<img th:src="@{/css/images/prodinthanji3.jpg}" alt="상품안내3">
+					<img th:src="@{/css/images/prodinthanji4.jpg}" alt="상품안내4">
+				</div>
+			</div>
+			<div class="button-container">
+				<a href="/product/notice" class="button">상품신청하러가기 ></a>
+			</div>
+		</div>
+	</div>
+	<footer>
+		<div th:insert="~{footer :: footer}"></div>
+	</footer>
+</body>
+
+</html>

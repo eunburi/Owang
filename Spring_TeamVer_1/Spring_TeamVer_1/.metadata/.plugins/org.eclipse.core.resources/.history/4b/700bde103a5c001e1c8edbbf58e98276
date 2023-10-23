@@ -1,0 +1,27 @@
+package aaa.controll;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import aaa.service.AskMapper;
+import aaa.service.QnaMapper;
+import jakarta.annotation.Resource;
+
+@Controller
+@RequestMapping("/main")
+public class MainController {
+	
+	
+	@Resource //맵퍼ok
+	QnaMapper qmp;
+	
+	
+	@GetMapping("")
+	String main() {
+		
+		
+		return "main";
+	}
+	
+}

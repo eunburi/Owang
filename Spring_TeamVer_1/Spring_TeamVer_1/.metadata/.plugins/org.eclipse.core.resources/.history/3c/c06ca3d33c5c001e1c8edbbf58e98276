@@ -1,0 +1,35 @@
+package aaa.controll;
+
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import aaa.model.QnaDTO;
+import aaa.service.AskMapper;
+import aaa.service.QnaMapper;
+import jakarta.annotation.Resource;
+
+@Controller
+@RequestMapping("/main")
+public class MainController {
+	
+	
+	@Resource //맵퍼ok
+	QnaMapper qmp;
+	
+	
+	@GetMapping("")
+	String main(Model mm, QnaDTO dto) {
+		dto.setPage(1);
+		dto.calc(qmp.listCnt()); // 페이징처리
+		System.out.println("dto" + dto);
+		List<QnaDTO>data = qmp.list(dto);
+		System.out.println(data);
+		mm.addAttribute("mainData",data);
+		return "main";
+	}
+	
+}

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>상품신청</title>
+	<style>
+		.product-temp {
+			text-align: center;
+			background-color: #fff;
+			padding: 100px 0;
+		}
+
+		table {
+			border-collapse: collapse;
+			border-top: 2px solid #000;
+			margin: 0 auto;
+		}
+
+		tr:not(:first-child):not(.space):hover {
+			background-color: #e0e0e0;
+		}
+
+		th {
+			padding: 8px;
+			border-bottom: 1px solid #999;
+		}
+
+		td {
+			padding: 8px;
+			border-bottom: 1px solid #ddd;
+		}
+
+		.btn-container {
+			margin: 20px 0;
+		}
+
+
+		.button {
+			display: inline-block;
+			padding: 10px 20px;
+			cursor: pointer;
+			text-align: center;
+			text-decoration: none;
+			background-color: #4dc8d9;
+			color: #fff;
+			border-radius: 5px;
+			border: none;
+		}
+
+		.button:hover {
+			background-color: #000;
+		}
+
+		.alct {
+			text-align: center;
+		}
+		
+		.alle {
+			text-align: left;
+		}
+
+		.price {
+			text-align: right;
+		}
+	</style>
+</head>
+
+<body>
+	<script th:inline="javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+			var submitBtn = document.getElementById("submitBtn");
+			submitBtn.addEventListener("click", function () {
+				if (/*[[${pay}]]*/ "" != null) {
+					var selectedProductId = document.querySelector('input[name="productRadio"]:checked');
+					if (selectedProductId) {
+						window.location.href = "/product/" + selectedProductId.value;
+					} else {
+						alert("상품을 선택해주세요");
+					}
+				} else {
+					alert(/*[[${msg}]]*/ "오류가 발생했습니다");
+					window.location.href = /*[[${goUrl}]]*/ "/";
+				}
+			});
+		});
+	</script>
+	<header>
+		<div th:insert="~{header :: header}"></div>
+	</header>
+	<div class="product-temp">
+		<table>
+			<tr class="alct">
+				<td></td>
+				<td>대상</td>
+				<td>상품명</td>
+				<td>금액</td>
+			</tr>
+			<tr th:each="dto : ${data}">
+				<td>
+					<input type="radio" th:if="${dto.productClient == '기업' and pay == 'comp'}"
+						th:value="${dto.productId}" name="productRadio"> <!-- 기업 선택 -->
+					<input type="radio" th:if="${dto.productClient == '개인' and pay == 'solo'}"
+						th:value="${dto.productId}" name="productRadio"> <!-- 개인 선택 -->
+				</td>
+				<td class="alct" th:text="${dto.productClient}"></td>
+				<td class="alle" th:text="${dto.productName}"></td>
+				<td class="price" th:text="${dto.formatPrice}"></td>
+			</tr>
+		</table>
+		<div class="btn-container">
+			<button id="submitBtn" class="button">신청</button>
+		</div>
+	</div>
+	<footer>
+		<div th:insert="~{footer :: footer}"></div>
+	</footer>
+</body>
+
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>회원상품관리</title>
+</head>
+<script>
+	function goBack() {
+		window.history.back();
+	}
+</script>
+
+<body>
+	<header>
+		<div th:insert="~{header :: header}"></div>
+	</header>
+	<a href="javascript:goBack()">이전 페이지</a>
+	<!-- 유효기간이 오늘보다 이후일 경우 -->
+	<th:block th:if="${date != null}">
+		<h3>현재 적용중인 상품은 [[${#dates.format(date, 'yyyy-MM-dd')}]] 23시 59분까지 유효합니다.</h3>
+	</th:block>
+	<h1>회원 결제내역</h1>
+	<table border="">
+		<thead>
+			<tr>
+				<th>주문번호</th>
+				<th>상품명</th>
+				<th>결제금액</th>
+				<th>대행사</th>
+				<th>결제일</th>
+				<th>상태</th>
+				<th>결제문의</th>
+			</tr>
+		</thead>
+		<tbody>
+			<th:block th:if="${paymentData}!=null">
+				<tr th:each="payment : ${paymentData}">
+					<td th:text="${payment.imp_uid}"></td>
+					<td th:text="${payment.name}"></td>
+					<td th:text="${payment.formatAmount}"></td>
+					<td th:text="${payment.pg_provider}"></td>
+					<th:block th:if="${payment.status=='완료'}">
+						<td th:text="${payment.paid_at}"></td>
+						<td><a th:href="${payment.receipt_url}"
+								onclick="window.open(this.href, '매출전표', 'width=450,height=450'); return false;"
+								target="_blank">완료</a></td>
+					</th:block>
+					<th:block th:unless="${payment.status=='완료'}">
+						<td th:text="${payment.cancelled_at}"></td>
+						<td th:text="${payment.status}"></td>
+					</th:block>
+					<td><a th:href="|/ask/insert/1/${payment.imp_uid}|"
+							onclick="event.preventDefault(); alert('결제문의를 작성하셔야 해당 결제의 주문번호가 자동으로 첨부됩니다'); window.location.href = this.href;">결제문의</a>
+					</td>
+				</tr>
+			</th:block>
+			<th:block th:if="${paymentData}==null">
+				<tr>
+					<td colspan="6">결제 내역이 없습니다.</td>
+				</tr>
+			</th:block>
+		</tbody>
+	</table>
+	<footer>
+		<div th:insert="~{footer :: footer}"></div>
+	</footer>
+</body>
+
+</html>
